@@ -1,30 +1,61 @@
 <script setup lang="ts">
-import StatisticsResults from "./components/StatisticsResults.vue";
-import type {SingleData,Data} from "./type/Types.ts";
-const TestSingleData: SingleData = {
-  Value:8.5,
-  Date:new Date()
+
+import {ref, watch} from 'vue';
+import {useRouter} from "vue-router";
+
+const activeIndex = ref<String>('0');
+const router = useRouter();
+let TestNumber = 0;
+const handleSelect = (key: string) => {
+  activeIndex.value = key;
+  switch (key){
+    case '0':
+      router.push({path:'/'});
+      break;
+    case '1':
+      router.push({path:'/index'});
+      break;
+    default:
+      break;
+  }
 }
-const DataLst:Array<SingleData> = [TestSingleData]
-const TestData: Data = {
-  Tag:"KH",
-  Data:DataLst
+watch(()=>TestNumber, newIndex=>{
+  console.log(newIndex);
+},{immediate:true,deep:true});
+const NumberPlus = ()=>{
+
+  console.log(TestNumber);
 }
 </script>
 
 <template>
   <div id="Layout">
     <div id="top">
-      <div id="Header">
-        <img src="./assets/img/coral.png" alt="logo" />
-        <div id="title"> Auto Aqua 自动水质监测</div>
+      <div id="NavMenu">
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            :ellipsis="false"
+            @select="handleSelect"
+        >
+          <el-menu-item index="0">
+            <img
+                style="height:100%"
+                src="./assets/img/coral.png"
+                alt="Element logo"
+            />
+          </el-menu-item>
+          <el-menu-item index="1">首页</el-menu-item>
+          <el-menu-item index="2">检测</el-menu-item>
+          <el-menu-item index="3">设置{{activeIndex}}{{TestNumber}}</el-menu-item>
+        </el-menu>
       </div>
     </div>
+    <input type="button" @click="NumberPlus"></input>
     <div id="middle">
       <div id="Content">
-        <div id="ReefIndexShow">
-          <StatisticsResults :Data="TestData"></StatisticsResults>
-        </div>
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -41,9 +72,16 @@ const TestData: Data = {
   width: 100%;
   height: 100px;
 }
+#NavMenu{
+  height: 20%;
+  width: 100%;
+  display: flex;
+  padding-top: 20px;
+  box-sizing: border-box;
+}
 #Header{
   width: 100%;
-  height: 100%;
+  height: 75%;
   display: flex;
 }
 #Header>img{
@@ -56,13 +94,15 @@ const TestData: Data = {
 }
 #ReefIndexShow{
   width: 50%;
-  height: 50%;
 }
 #middle{
   display: flex;
   flex-grow: 1;
 }
 #Content{
-  flex-grow: 1;;
+  flex-grow: 1;
+}
+.el-menu{
+  width: 100%;
 }
 </style>
