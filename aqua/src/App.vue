@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 import {useRouter} from "vue-router";
 
 const activeIndex = ref<String>('0');
 const router = useRouter();
-let TestNumber = 0;
 const handleSelect = (key: string) => {
   activeIndex.value = key;
   switch (key){
@@ -15,16 +14,15 @@ const handleSelect = (key: string) => {
     case '1':
       router.push({path:'/index'});
       break;
+    case '2':
+      router.push({path:'/checkout'});
+      break;
+    case '3':
+      router.push({path:'/setting'});
+      break;
     default:
       break;
   }
-}
-watch(()=>TestNumber, newIndex=>{
-  console.log(newIndex);
-},{immediate:true,deep:true});
-const NumberPlus = ()=>{
-
-  console.log(TestNumber);
 }
 </script>
 
@@ -48,11 +46,10 @@ const NumberPlus = ()=>{
           </el-menu-item>
           <el-menu-item index="1">首页</el-menu-item>
           <el-menu-item index="2">检测</el-menu-item>
-          <el-menu-item index="3">设置{{activeIndex}}{{TestNumber}}</el-menu-item>
+          <el-menu-item index="3">设置</el-menu-item>
         </el-menu>
       </div>
     </div>
-    <input type="button" @click="NumberPlus"></input>
     <div id="middle">
       <div id="Content">
         <router-view></router-view>
